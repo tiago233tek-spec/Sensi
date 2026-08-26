@@ -1,0 +1,18 @@
+<!doctype html><html lang="pt-BR"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Painel ADM • DEMenor Sensi</title><link rel="stylesheet" href="/style.css">
+</head><body><header><a class="logo" href="/"><b>DS</b> DEMENOR <span>SENSI</span></a><a href="/">← Site</a></header>
+<main class="admin">
+<section id="login" class="box"><small>🔐 ÁREA RESTRITA</small><h1>Painel administrativo</h1><input id="pass" type="password" placeholder="Senha do administrador"><button class="btn" id="enter">ENTRAR</button><p id="msg"></p></section>
+<section id="dashboard" class="box hidden"><div class="head"><div><small>⚙️ ADMIN</small><h1>Publicar vídeo</h1></div><button id="out">Sair</button></div>
+<form id="form">
+<input name="title" placeholder="Título do vídeo" required>
+<select name="category"><option>Dicas</option><option>Métodos</option><option>HUDs</option><option>Configurações</option><option>Outros</option></select>
+<select name="brand"><option>Todos</option><option>Motorola</option><option>Samsung</option><option>Xiaomi</option><option>Infinix</option></select>
+<input name="url" placeholder="Link do YouTube ou página do vídeo">
+<input name="thumbnailUrl" placeholder="URL da thumbnail (opcional)">
+<label>Ou envie a thumbnail <input type="file" name="thumbnail" accept="image/*"></label>
+<label>Enviar arquivo de vídeo (opcional, até 200 MB) <input type="file" name="video" accept="video/*"></label>
+<textarea name="description" placeholder="Descrição"></textarea>
+<button class="btn" type="submit">PUBLICAR VÍDEO</button><div id="status"></div></form>
+<h2>Vídeos publicados</h2><div id="list"></div></section></main><script src="/admin.js"></script></body></html>
