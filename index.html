@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Demenor Sensi</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#080808;color:#fff;font-family:Arial,Helvetica,sans-serif}
+header{position:sticky;top:0;z-index:10;background:#111;border-bottom:1px solid #252525;padding:14px 18px;display:flex;align-items:center;justify-content:space-between}
+.brandTop{display:flex;align-items:center;gap:9px;font-weight:900;font-size:18px}.brandTop img{width:42px;height:42px;border-radius:50%;object-fit:cover}.brandTop b{color:#1767ff}.menu{color:#aaa}.adminlink{font-size:12px;color:#999;text-decoration:none}
+.hero{background:linear-gradient(140deg,#1a0c25,#090909);padding:30px 18px}.hero h1{font-size:30px;margin:0 0 8px}.hero p{color:#aaa;margin:0;line-height:1.5}
+.wrap{max-width:1050px;margin:auto;padding:0 18px 45px}
+.nav{display:flex;gap:9px;margin:20px 0;overflow:auto}.nav button{white-space:nowrap}
+.btn{background:#9230e9;color:#fff;border:0;border-radius:9px;padding:11px 15px;font-weight:800;cursor:pointer}.btn.secondary{background:#252525}
+.section-title{font-size:19px;font-weight:800;margin:25px 0 14px;border-left:5px solid #9230e9;padding-left:10px}
+.search{display:flex;gap:8px;margin:15px 0}.search input{flex:1}.input{background:#111;border:1px solid #333;color:#fff;border-radius:9px;padding:12px;outline:0}
+.filters{display:flex;gap:8px;overflow:auto;padding-bottom:5px}.filter{background:#171717;border:1px solid #303030;color:#ddd;border-radius:20px;padding:8px 13px;white-space:nowrap}.filter.active{background:#9230e9;border-color:#9230e9}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.card{background:#141414;border:1px solid #292929;border-radius:14px;overflow:hidden}.thumb{width:100%;aspect-ratio:16/9;background:#0b0b0b;object-fit:cover}.thumb.empty{display:grid;place-items:center;color:#666}.cardbody{padding:13px}.card h3{margin:0 0 6px;font-size:16px}.muted{color:#929292;font-size:13px;line-height:1.5}.actions{display:flex;gap:7px;margin-top:11px}.watch{flex:1}.fav{width:43px;background:#242424}.page{display:none}.page.active{display:block}
+.player{background:#000;border-radius:14px;overflow:hidden;margin-bottom:14px}.player iframe{width:100%;aspect-ratio:16/9;border:0}.close{margin-bottom:12px}
+.empty{text-align:center;color:#777;padding:35px;background:#121212;border-radius:14px}
+footer{text-align:center;color:#666;padding:25px;border-top:1px solid #222;font-size:12px}
+@media(max-width:800px){.grid{grid-template-columns:repeat(2,1fr)}}@media(max-width:520px){.grid{grid-template-columns:1fr}.hero h1{font-size:26px}}
+</style>
+</head>
+<body>
+<header>
+<div class="menu">☰</div>
+<div class="brandTop"><img src="/logo-demenor.png" alt="Demenor Sensi"><span>DEMENOR <b>SENSI</b></span></div>
+<a class="adminlink" href="/admin.html">ADMIN</a>
+</header>
+<section class="hero"><div class="wrap"><h1>Seu conteúdo de Sensi</h1><p>Assista às configurações, aulas e HUD em um só lugar.</p></div></section>
+<main class="wrap">
+<div class="nav">
+<button class="btn" onclick="page('sensi')">📱 SENSI</button>
+<button class="btn secondary" onclick="page('hud')">🎮 HUD</button>
+<button class="btn secondary" onclick="page('fav')">⭐ FAVORITOS</button>
+</div>
+
+<section id="sensi" class="page active">
+<div class="section-title">Sensi por aparelho</div>
+<div class="filters" id="filters"></div>
+<div class="search"><input class="input" id="search" placeholder="🔎 Procurar vídeo..." oninput="loadVideos()"></div>
+<div id="videoGrid" class="grid"></div>
+</section>
+
+<section id="hud" class="page">
+<div class="section-title">🎮 Vídeos de HUD</div>
+<div id="hudGrid" class="grid"></div>
+</section>
+
+<section id="fav" class="page">
+<div class="section-title">⭐ Meus favoritos</div>
+<div id="favGrid" class="grid"></div>
+</section>
+
+<section id="watch" class="page">
+<button class="btn secondary close" onclick="page('sensi')">← Voltar</button>
+<div id="player" class="player"></div><div id="watchInfo"></div>
+</section>
+</main>
+<footer>Demenor Sensi • Conteúdo exclusivo</footer>
+<script>
+const brands=["Todos","Motorola","Samsung","Xiaomi","Infinix"];
+let currentBrand="Todos",allVideos=[];
+const favKey="demenor_favs";
+function favorites(){return JSON.parse(localStorage.getItem(favKey)||"[]")}
+function isFav(id){return favorites().includes(Number(id))}
+function toggleFav(id){let f=favorites();id=Number(id);f=f.includes(id)?f.filter(x=>x!==id):[...f,id];localStorage.setItem(favKey,JSON.stringify(f));loadVideos()}
+function page(name){
+ document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));
+ document.getElementById(name).classList.add("active");
+ if(name==="fav")renderFav();
+ if(name==="hud")renderHud();
+ window.scrollTo({top:0,behavior:"smooth"});
+}
+function renderFilters(){
+ document.getElementById("filters").innerHTML=brands.map(b=>`<button class="filter ${b===currentBrand?"active":""}" onclick="currentBrand='${b}';renderFilters();loadVideos()">${b}</button>`).join("");
+}
+function card(v){
+ const thumb=v.thumbnail?`<img class="thumb" src="${esc(v.thumbnail)}">`:`<div class="thumb empty">🎥 DEMENOR SENSI</div>`;
+ return `<article class="card">${thumb}<div class="cardbody"><h3>${esc(v.title)}</h3><div class="muted">${esc(v.brand)} • ${esc(v.description||"Vídeo de Sensi")}</div><div class="actions"><button class="btn watch" onclick="watch(${v.id})">▶ ASSISTIR</button><button class="btn fav" onclick="toggleFav(${v.id})">${isFav(v.id)?"★":"☆"}</button></div></div></article>`;
+}
+async function loadVideos(){
+ renderFilters();
+ const q=document.getElementById("search").value;
+ const r=await fetch("/api/videos?brand="+encodeURIComponent(currentBrand)+"&q="+encodeURIComponent(q));
+ allVideos=await r.json();
+ document.getElementById("videoGrid").innerHTML=allVideos.filter(v=>v.brand!=="HUD").map(card).join("")||`<div class="empty">Nenhum vídeo encontrado.</div>`;
+}
+function renderHud(){
+ document.getElementById("hudGrid").innerHTML=allVideos.filter(v=>v.brand==="HUD").map(card).join("")||`<div class="empty">Nenhum vídeo de HUD publicado.</div>`;
+}
+function renderFav(){
+ const f=favorites(),items=allVideos.filter(v=>f.includes(v.id));
+ document.getElementById("favGrid").innerHTML=items.map(card).join("")||`<div class="empty">Você ainda não adicionou favoritos.</div>`;
+}
+function watch(id){
+ const v=allVideos.find(x=>x.id===id);if(!v)return;
+ page("watch");
+ document.getElementById("player").innerHTML=`<iframe src="${esc(v.url)}" allowfullscreen></iframe>`;
+ document.getElementById("watchInfo").innerHTML=`<h2>${esc(v.title)}</h2><p class="muted">${esc(v.brand)} — ${esc(v.description||"")}</p>`;
+}
+function esc(x){return String(x||"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]))}
+renderFilters();loadVideos();
+</script>
+</body></html>
