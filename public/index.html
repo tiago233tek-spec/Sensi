@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Demenor Sensi</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background: #050505;
+      color: white;
+      min-height: 100vh;
+    }
+
+    header {
+      background: #080808;
+      border-bottom: 1px solid #168cff;
+      padding: 20px;
+      text-align: center;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    header h1 {
+      font-size: 28px;
+      color: white;
+    }
+
+    header h1 span {
+      color: #168cff;
+    }
+
+    header p {
+      color: #aaa;
+      margin-top: 6px;
+    }
+
+    .container {
+      width: 94%;
+      max-width: 1000px;
+      margin: 25px auto;
+    }
+
+    .search {
+      width: 100%;
+      padding: 15px;
+      border-radius: 10px;
+      border: 1px solid #168cff;
+      background: #111;
+      color: white;
+      outline: none;
+      margin-bottom: 20px;
+      font-size: 16px;
+    }
+
+    .devices {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      padding-bottom: 10px;
+      margin-bottom: 25px;
+    }
+
+    .devices button,
+    .level button {
+      border: 1px solid #168cff;
+      background: #101010;
+      color: white;
+      padding: 12px 18px;
+      border-radius: 9px;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .devices button.active,
+    .level button.active {
+      background: #168cff;
+      color: white;
+    }
+
+    h2 {
+      margin-bottom: 15px;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 18px;
+    }
+
+    .card {
+      background: #111;
+      border: 1px solid #222;
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 0 15px rgba(0, 120, 255, .15);
+    }
+
+    .card video {
+      width: 100%;
+      display: block;
+      background: #000;
+      max-height: 300px;
+    }
+
+    .card-content {
+      padding: 16px;
+    }
+
+    .card h3 {
+      margin-bottom: 8px;
+      color: #168cff;
+    }
+
+    .card p {
+      color: #bbb;
+      line-height: 1.5;
+    }
+
+    .level {
+      display: flex;
+      gap: 8px;
+      margin: 15px 0;
+    }
+
+    .empty {
+      text-align: center;
+      color: #888;
+      padding: 40px 10px;
+    }
+
+    footer {
+      text-align: center;
+      color: #666;
+      padding: 40px 10px;
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <h1>DEMENOR <span>SENSI</span></h1>
+  <p>Sensibilidade e vídeos para seu celular</p>
+</header>
+
+<main class="container">
+
+  <input
+    id="search"
+    class="search"
+    type="search"
+    placeholder="Pesquisar sensi..."
+  >
+
+  <div class="devices">
+    <button class="active" data-device="Todos">Todos</button>
+    <button data-device="Motorola">Motorola</button>
+    <button data-device="Samsung">Samsung</button>
+    <button data-device="Xiaomi">Xiaomi</button>
+    <button data-device="Infinix">Infinix</button>
+  </div>
+
+  <h2>📱 Sensibilidades</h2>
+
+  <div id="cards" class="cards"></div>
+
+</main>
+
+<footer>
+  © 2026 Demenor Sensi
+</footer>
+
+<script>
+  const cards = document.getElementById("cards");
+  const search = document.getElementById("search");
+
+  let selectedDevice = "Todos";
+
+  /*
+    Você poderá trocar estes exemplos pelas suas próprias
+    sensibilidades e vídeos depois.
+  */
+  const videos = [
+    {
+      device: "Motorola",
+      level: "Baixa",
+      title: "Motorola - Sensi Baixa",
+      description: "Configuração de sensibilidade baixa.",
+      video: ""
+    },
+    {
+      device: "Motorola",
+      level: "Média",
+      title: "Motorola - Sensi Média",
+      description: "Configuração de sensibilidade média.",
+      video: ""
+    },
+    {
+      device: "Motorola",
+      level: "Alta",
+      title: "Motorola - Sensi Alta",
+      description: "Configuração de sensibilidade alta.",
+      video: ""
+    },
+
+    {
+      device: "Samsung",
+      level: "Baixa",
+      title: "Samsung - Sensi Baixa",
+      description: "Configuração de sensibilidade baixa.",
+      video: ""
+    },
+    {
+      device: "Samsung",
+      level: "Média",
+      title: "Samsung - Sensi Média",
+      description: "Configuração de sensibilidade média.",
+      video: ""
+    },
+    {
+      device: "Samsung",
+      level: "Alta",
+      title: "Samsung - Sensi Alta",
+      description: "Configuração de sensibilidade alta.",
+      video: ""
+    },
+
+    {
+      device: "Xiaomi",
+      level: "Baixa",
+      title: "Xiaomi - Sensi Baixa",
+      description: "Configuração de sensibilidade baixa.",
+      video: ""
+    },
+    {
+      device: "Xiaomi",
+      level: "Média",
+      title: "Xiaomi - Sensi Média",
+      description: "Configuração de sensibilidade média.",
+      video: ""
+    },
+    {
+      device: "Xiaomi",
+      level: "Alta",
+      title: "Xiaomi - Sensi Alta",
+      description: "Configuração de sensibilidade alta.",
+      video: ""
+    },
+
+    {
+      device: "Infinix",
+      level: "Baixa",
+      title: "Infinix - Sensi Baixa",
+      description: "Configuração de sensibilidade baixa.",
+      video: ""
+    },
+    {
+      device: "Infinix",
+      level: "Média",
+      title: "Infinix - Sensi Média",
+      description: "Configuração de sensibilidade média.",
+      video: ""
+    },
+    {
+      device: "Infinix",
+      level: "Alta",
+      title: "Infinix - Sensi Alta",
+      description: "Configuração de sensibilidade alta.",
+      video: ""
+    }
+  ];
+
+  function render() {
+    const term = search.value.toLowerCase();
+
+    const filtered = videos.filter(item => {
+      const deviceOk =
+        selectedDevice === "Todos" ||
+        item.device === selectedDevice;
+
+      const searchOk =
+        item.title.toLowerCase().includes(term) ||
+        item.device.toLowerCase().includes(term) ||
+        item.level.toLowerCase().includes(term);
+
+      return deviceOk && searchOk;
+    });
+
+    cards.innerHTML = "";
+
+    if (filtered.length === 0) {
+      cards.innerHTML =
+        '<div class="empty">Nenhuma sensibilidade encontrada.</div>';
+      return;
+    }
+
+    filtered.forEach(item => {
+      const card = document.createElement("article");
+      card.className = "card";
+
+      let videoHTML = "";
+
+      if (item.video) {
+        videoHTML = `
+          <video controls preload="metadata">
+            <source src="${item.video}" type="video/mp4">
+            Seu navegador não consegue reproduzir este vídeo.
+          </video>
+        `;
+      }
+
+      card.innerHTML = `
+        ${videoHTML}
+
+        <div class="card-content">
+          <h3>${item.title}</h3>
+          <p><b>Celular:</b> ${item.device}</p>
+          <p><b>Nível:</b> ${item.level}</p>
+          <p>${item.description}</p>
+        </div>
+      `;
+
+      cards.appendChild(card);
+    });
+  }
+
+  document.querySelectorAll(".devices button").forEach(button => {
+    button.addEventListener("click", () => {
+      document
+        .querySelectorAll(".devices button")
+        .forEach(btn => btn.classList.remove("active"));
+
+      button.classList.add("active");
+      selectedDevice = button.dataset.device;
+
+      render();
+    });
+  });
+
+  search.addEventListener("input", render);
+
+  render();
+</script>
+
+</body>
+  </html>
