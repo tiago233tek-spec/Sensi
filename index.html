@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Demenor Sensi</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header><div class="logo">DEMENOR <span>SENSI</span></div><a href="/admin.html">ADM</a></header>
+<main>
+<section class="hero"><h1>SENSI PARA SEU CELULAR</h1><p>Motorola, Samsung, Xiaomi e Infinix — baixa, média e alta.</p></section>
+<div class="filters">
+<select id="brand"><option value="">Todos os celulares</option><option>Motorola</option><option>Samsung</option><option>Xiaomi</option><option>Infinix</option></select>
+<select id="level"><option value="">Todas as sensibilidades</option><option>Baixa</option><option>Média</option><option>Alta</option></select>
+</div>
+<section id="videos" class="grid"></section>
+</main>
+<script>
+const videos=document.getElementById("videos"),brand=document.getElementById("brand"),level=document.getElementById("level");
+let all=[];
+async function load(){all=await fetch("/api/videos").then(r=>r.json()); render();}
+function render(){
+ const b=brand.value,l=level.value;
+ const list=all.filter(v=>(!b||v.brand===b)&&(!l||v.level===l));
+ videos.innerHTML=list.length?list.map(v=>`<article class="card">
+ <video controls preload="metadata" src="${v.url}"></video>
+ <h2>${v.title}</h2><div class="tag">${v.brand} • ${v.level}</div><p>${v.description||""}</p>
+ </article>`).join(""):"<p class='empty'>Nenhum vídeo publicado ainda.</p>";
+}
+brand.onchange=level.onchange=render; load();
+</script>
+</body></html>

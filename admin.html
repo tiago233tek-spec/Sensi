@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ADM — Demenor Sensi</title><link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header><div class="logo">DEMENOR <span>SENSI</span> — ADM</div><a href="/">SITE</a></header>
+<main>
+<section class="panel" id="login">
+<h1>🔐 Administrador</h1><input id="password" type="password" placeholder="Senha do administrador">
+<button onclick="login()">ENTRAR</button><p id="msg"></p>
+</section>
+<section class="panel hidden" id="app">
+<h1>Publicar vídeo</h1>
+<form id="form">
+<input name="title" placeholder="Título" required>
+<select name="brand"><option>Motorola</option><option>Samsung</option><option>Xiaomi</option><option>Infinix</option></select>
+<select name="level"><option>Baixa</option><option>Média</option><option>Alta</option></select>
+<textarea name="description" placeholder="Descrição"></textarea>
+<input name="video" type="file" accept="video/*" required>
+<button>PUBLICAR VÍDEO</button>
+</form>
+<h2>Vídeos publicados</h2><div id="list"></div>
+</section>
+</main>
+<script>
+let pass="";
+async function login(){
+ const p=document.getElementById("password").value;
+ const r=await fetch("/api/login",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({password:p})});
+ const d=await r.json();
+ if(d.ok){pass=p;login.classList.add("hidden");app.classList.remove("hidden");load();}
+ else msg.textContent="Senha incorreta";
+}
+async function load(){
+ const list=await fetch("/api/videos").then(r=>r.json());
+ document.getElementById("list").innerHTML=list.map(v=>`<div class="row"><b>${v.title}</b><span>${v.brand} • ${v.level}</span><button onclick="del('${v.id}')">EXCLUIR</button></div>`).join("")||"<p>Nenhum vídeo.</p>";
+}
+form.onsubmit=async e=>{
+ e.preventDefault(); const fd=new FormData(form); fd.append("password",pass);
+ const r=await fetch("/api/videos",{method:"POST",body:fd}); const d=await r.json();
+ if(!r.ok)return alert(d.error||"Erro");
+ form.reset(); load();
+};
+async function del(id){
+ if(!confirm("Excluir este vídeo?"))return;
+ await fetch("/api/videos/"+id,{method:"DELETE",headers:{"Content-Type":"application/json"},body:JSON.stringify({password:pass})});load();
+}
+</script>
+</body></html>
