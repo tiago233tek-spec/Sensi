@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Demenor Sensi</title><link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header><h1>DEMENOR <span>SENSI</span></h1><a href="/admin.html">ADMIN</a></header>
+<main>
+<section class="hero"><h2>Configurações de Sensi</h2><p>Escolha seu celular e o nível da sensibilidade.</p>
+<div class="keybox"><input id="key" placeholder="Digite sua Key"><button onclick="checkKey()">ENTRAR</button><small id="keymsg"></small></div></section>
+<section id="content" class="locked">
+<div class="filters">
+<select id="brand" onchange="loadVideos()"><option>Motorola</option><option>Samsung</option><option>Xiaomi</option><option>Infinix</option></select>
+<select id="level" onchange="loadVideos()"><option>Baixa</option><option>Média</option><option>Alta</option></select>
+</div><div id="videos" class="grid"></div>
+</section>
+</main>
+<script src="app.js"></script>
+</body></html>
