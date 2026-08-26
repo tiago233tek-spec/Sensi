@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Demenor Sensi</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+
+<header>
+  <div class="logo">DEMENOR <span>SENSI</span></div>
+  <a href="/admin.html">🔐 PAINEL ADM</a>
+</header>
+
+<main>
+
+  <section class="hero">
+    <div class="logo">👑 DEMENOR <span>SENSI</span></div>
+    <h1>SENSI PERFEITA PARA SEU CELULAR</h1>
+    <p>
+      Vídeos de sensibilidade Baixa, Média e Alta para
+      Motorola, Samsung, Xiaomi e Infinix.
+    </p>
+  </section>
+
+  <section class="filters">
+    <select id="brand">
+      <option value="">Todos os celulares</option>
+      <option value="Motorola">Motorola</option>
+      <option value="Samsung">Samsung</option>
+      <option value="Xiaomi">Xiaomi</option>
+      <option value="Infinix">Infinix</option>
+    </select>
+
+    <select id="level">
+      <option value="">Todas as sensibilidades</option>
+      <option value="Baixa">Sensi Baixa</option>
+      <option value="Média">Sensi Média</option>
+      <option value="Alta">Sensi Alta</option>
+    </select>
+  </section>
+
+  <section id="videos" class="grid"></section>
+
+</main>
+
+<script>
+const videosContainer = document.getElementById("videos");
+const brandSelect = document.getElementById("brand");
+const levelSelect = document.getElementById("level");
+
+let videos = [];
+
+function escapeHTML(text) {
+  return String(text || "").replace(/[&<>"']/g, function(c) {
+    return {
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      '"': "&quot;",
+      "'": "&#39;"
+    }[c];
+  });
+}
+
+async function carregarVideos() {
+  try {
+    const resposta = await fetch("/api/videos");
+    videos = await resposta.json();
+    mostrarVideos();
+  } catch (erro) {
+    videosContainer.innerHTML =
+      "<p>Erro ao carregar os vídeos.</p>";
+  }
+}
+
+function mostrarVideos() {
+
+  const filtrados = videos.filter(video => {
+
+    const celularOk =
+      !brandSelect.value ||
+      video.brand === brandSelect.value;
+
+    const sensiOk =
+      !levelSelect.value ||
+      video.level === levelSelect.value;
+
+    return celularOk && sensiOk;
+  });
+
+  if (!filtrados.length) {
+    videosContainer.innerHTML =
+      "<p>Nenhum vídeo publicado ainda.</p>";
+    return;
+  }
+
+  videosContainer.innerHTML = filtrados.map(video => `
+    
+    <article class="card">
+
+      <video
+        controls
+        preload="metadata"
+        src="${escapeHTML(video.url)}">
+      </video>
+
+      <h2>
+        ${escapeHTML(video.title)}
+      </h2>
+
+      <strong>
+        📱 ${escapeHTML(video.brand)}
+        • Sensi ${escapeHTML(video.level)}
+      </strong>
+
+      <p>
+        ${escapeHTML(video.description)}
+      </p>
+
+    </article>
+
+  `).join("");
+}
+
+brandSelect.addEventListener("change", mostrarVideos);
+levelSelect.addEventListener("change", mostrarVideos);
+
+carregarVideos();
+</script>
+
+</body>
+        </html>
