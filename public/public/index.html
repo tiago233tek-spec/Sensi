@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>Demenor Sensi</title>
+
+  <link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+
+<header>
+
+  <div class="brand-logo">
+    👑 DEMENOR <span>SENSI</span>
+  </div>
+
+  <nav>
+    <a href="/">🏠 Início</a>
+    <a href="#motorola">📱 Motorola</a>
+    <a href="#samsung">📱 Samsung</a>
+    <a href="#xiaomi">📱 Xiaomi</a>
+    <a href="#infinix">📱 Infinix</a>
+  </nav>
+
+  <a class="admin-button" href="/admin">
+    🔐 Painel ADM
+  </a>
+
+</header>
+
+
+<section class="hero">
+
+  <div class="hero-logo">
+    DEMENOR <span>SENSI</span>
+  </div>
+
+  <h1>
+    SENSI PERFEITA PARA SEU CELULAR
+  </h1>
+
+  <p>
+    Vídeos de sensibilidade Baixa, Média e Alta
+    para Motorola, Samsung, Xiaomi e Infinix.
+  </p>
+
+</section>
+
+
+<section class="filters">
+
+  <input
+    id="search"
+    type="search"
+    placeholder="🔎 Pesquisar sensi..."
+  >
+
+  <button data-brand="">
+    Todos
+  </button>
+
+  <button data-brand="Motorola">
+    Motorola
+  </button>
+
+  <button data-brand="Samsung">
+    Samsung
+  </button>
+
+  <button data-brand="Xiaomi">
+    Xiaomi
+  </button>
+
+  <button data-brand="Infinix">
+    Infinix
+  </button>
+
+</section>
+
+
+<main>
+
+  <h2 class="section-title">
+    📱 Sensibilidades
+  </h2>
+
+  <div id="videos" class="video-grid"></div>
+
+</main>
+
+
+<footer>
+
+  <strong>
+    👑 DEMENOR SENSI
+  </strong>
+
+  <span>
+    © 2026 - Todos os direitos reservados
+  </span>
+
+</footer>
+
+
+<script>
+
+const videosContainer =
+  document.getElementById("videos");
+
+const search =
+  document.getElementById("search");
+
+let videos = [];
+
+let selectedBrand = "";
+
+
+function escapeHTML(text) {
+
+  return String(text || "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
+
+async function carregarVideos() {
+
+  try {
+
+    const response =
+      await fetch("/api/videos");
+
+    videos = await response.json();
+
+    mostrarVideos();
+
+  } catch {
+
+    videosContainer.innerHTML =
+      "<p>Erro ao carregar os vídeos.</p>";
+
+  }
+}
+
+
+function mostrarVideos() {
+
+  const texto =
+    search.value.toLowerCase().trim();
+
+  const filtrados =
+    videos.filter(video => {
+
+      const marcaOK =
+        !selectedBrand ||
+        video.brand === selectedBrand;
+
+      const buscaOK =
+        !texto ||
+        String(video.title)
+          .toLowerCase()
+          .includes(texto) ||
+
+        String(video.description)
+          .toLowerCase()
+          .includes(texto);
+
+      return marcaOK && buscaOK;
+    });
+
+
+  if (!filtrados.length) {
+
+    videosContainer.innerHTML =
+      "<p class='empty'>Nenhum vídeo publicado ainda.</p>";
+
+    return;
+  }
+
+
+  videosContainer.innerHTML =
+    filtrados.map(video => `
+
+      <article class="video-card">
+
+        <video
+          controls
+          preload="metadata"
+          src="${escapeHTML(video.url)}">
+        </video>
+
+        <h3>
+          ${escapeHTML(video.title)}
+        </h3>
+
+        <div class="video-info">
+
+          📱 ${escapeHTML(video.brand)}
+
+          <br>
+
+          📊 Sensi ${escapeHTML(video.level)}
+
+        </div>
+
+        <p>
+          ${escapeHTML(video.description)}
+        </p>
+
+      </article>
+
+    `).join("");
+}
+
+
+document
+  .querySelectorAll("[data-brand]")
+  .forEach(button => {
+
+    button.addEventListener("click", () => {
+
+      selectedBrand =
+        button.dataset.brand;
+
+      document
+        .querySelectorAll("[data-brand]")
+        .forEach(btn =>
+          btn.classList.remove("active")
+        );
+
+      button.classList.add("active");
+
+      mostrarVideos();
+
+    });
+
+  });
+
+
+search.addEventListener(
+  "input",
+  mostrarVideos
+);
+
+
+carregarVideos();
+
+</script>
+
+</body>
+  </html>
