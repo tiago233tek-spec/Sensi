@@ -1,0 +1,433 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background:
+    radial-gradient(
+      circle at top,
+      #061b40,
+      #02050a 55%
+    );
+
+  color: white;
+
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
+}
+
+
+/* TOPO */
+
+header {
+  min-height: 78px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 20px;
+
+  padding: 12px 30px;
+
+  background:
+    rgba(1, 7, 18, 0.96);
+
+  border-bottom:
+    1px solid #087cff;
+
+  box-shadow:
+    0 0 25px
+    rgba(0, 102, 255, 0.35);
+
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+
+.brand-logo {
+  font-size: 25px;
+  font-weight: 900;
+  white-space: nowrap;
+}
+
+.brand-logo span,
+.hero-logo span {
+  color: #087cff;
+}
+
+
+nav {
+  display: flex;
+  gap: 25px;
+  align-items: center;
+  justify-content: center;
+}
+
+
+nav a {
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+
+nav a:hover {
+  color: #168cff;
+}
+
+
+.admin-button {
+  padding: 13px 20px;
+
+  border:
+    1px solid #168cff;
+
+  border-radius: 12px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #03132d,
+      #075cff
+    );
+
+  color: white;
+
+  text-decoration: none;
+
+  font-weight: bold;
+
+  box-shadow:
+    0 0 18px
+    rgba(0, 119, 255, 0.55);
+}
+
+
+/* HERO */
+
+.hero {
+  text-align: center;
+
+  padding: 70px 20px 55px;
+
+  background:
+    radial-gradient(
+      circle at center,
+      rgba(0, 106, 255, 0.4),
+      transparent 55%
+    );
+}
+
+
+.hero-logo {
+  font-size:
+    clamp(45px, 9vw, 90px);
+
+  font-weight: 900;
+
+  text-shadow:
+    0 0 30px
+    rgba(0, 119, 255, 0.8);
+}
+
+
+.hero h1 {
+  font-size:
+    clamp(24px, 5vw, 48px);
+
+  margin:
+    20px 0 10px;
+}
+
+
+.hero p {
+  color: #b9c2d0;
+
+  font-size: 18px;
+
+  max-width: 750px;
+
+  margin: auto;
+
+  line-height: 1.6;
+}
+
+
+/* FILTROS */
+
+.filters {
+  display: flex;
+
+  flex-wrap: wrap;
+
+  justify-content: center;
+
+  gap: 12px;
+
+  padding: 25px;
+}
+
+
+#search {
+  width: min(100%, 700px);
+
+  padding: 16px 18px;
+
+  border:
+    1px solid #087cff;
+
+  border-radius: 12px;
+
+  background: #071225;
+
+  color: white;
+
+  font-size: 16px;
+
+  outline: none;
+}
+
+
+.filters button {
+  padding: 13px 25px;
+
+  border:
+    1px solid #087cff;
+
+  border-radius: 11px;
+
+  background: #071225;
+
+  color: white;
+
+  font-size: 16px;
+
+  font-weight: bold;
+
+  cursor: pointer;
+}
+
+
+.filters button:hover,
+.filters button.active {
+  background:
+    linear-gradient(
+      135deg,
+      #168cff,
+      #0048d0
+    );
+
+  box-shadow:
+    0 0 18px
+    rgba(0, 119, 255, 0.5);
+}
+
+
+/* CONTEÚDO */
+
+main {
+  max-width: 1250px;
+
+  margin: auto;
+
+  padding:
+    10px 20px 60px;
+}
+
+
+.section-title {
+  font-size: 32px;
+
+  margin:
+    25px 0;
+}
+
+
+/* VÍDEOS */
+
+.video-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(3, 1fr);
+
+  gap: 22px;
+}
+
+
+.video-card {
+  padding: 15px;
+
+  border-radius: 18px;
+
+  background:
+    linear-gradient(
+      145deg,
+      #071529,
+      #02060e
+    );
+
+  border:
+    1px solid #075cff;
+
+  box-shadow:
+    0 0 18px
+    rgba(0, 102, 255, 0.22);
+}
+
+
+.video-card video {
+  width: 100%;
+
+  display: block;
+
+  aspect-ratio: 16 / 9;
+
+  object-fit: cover;
+
+  border-radius: 12px;
+
+  background: #000;
+}
+
+
+.video-card h3 {
+  color: #168cff;
+
+  font-size: 20px;
+
+  margin:
+    15px 0 8px;
+}
+
+
+.video-info {
+  color: #e9edf5;
+
+  font-weight: bold;
+
+  line-height: 1.6;
+}
+
+
+.video-card p {
+  color: #aeb7c5;
+
+  line-height: 1.5;
+}
+
+
+.empty {
+  text-align: center;
+
+  color: #aeb7c5;
+
+  font-size: 18px;
+
+  padding: 50px;
+}
+
+
+/* RODAPÉ */
+
+footer {
+  display: flex;
+
+  justify-content: space-between;
+
+  gap: 15px;
+
+  padding: 25px 30px;
+
+  border-top:
+    1px solid #087cff;
+
+  background:
+    #02060e;
+
+  color: #aeb7c5;
+}
+
+
+footer strong {
+  color: white;
+}
+
+
+/* CELULAR */
+
+@media (max-width: 850px) {
+
+  header {
+    padding: 12px 15px;
+  }
+
+  nav {
+    display: none;
+  }
+
+  .brand-logo {
+    font-size: 20px;
+  }
+
+  .admin-button {
+    padding: 10px 13px;
+    font-size: 13px;
+  }
+
+  .hero {
+    padding: 45px 15px;
+  }
+
+  .hero-logo {
+    font-size: 43px;
+  }
+
+  .hero h1 {
+    font-size: 27px;
+  }
+
+  .hero p {
+    font-size: 15px;
+  }
+
+  .video-grid {
+    grid-template-columns: 1fr;
+  }
+
+  main {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  footer {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+
+
+@media (
+  min-width: 851px
+) and (
+  max-width: 1100px
+) {
+
+  .video-grid {
+    grid-template-columns:
+      repeat(2, 1fr);
+  }
+
+  nav {
+    gap: 10px;
+  }
+
+  nav a {
+    font-size: 14px;
+  }
+  }
